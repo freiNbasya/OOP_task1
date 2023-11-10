@@ -98,6 +98,49 @@ class Airline {
 public:
     Airline() {}
 
+    void readConfiguration(const std::string& filename) {
+        std::ifstream configFile(filename);
+        if (!configFile.is_open()) {
+            std::cerr << "Failed to open config file." << std::endl;
+            return;
+        }
+
+        std::string line;
+        std::getline(configFile, line);
+
+        while (std::getline(configFile, line)) {
+            std::istringstream iss(line);
+            std::string date;
+            std::string flightNumber;
+            int seatsPerRow;
+            int totalRows;
+            std::string row_range1;
+            double price_range1;
+            std::string row_range2;
+            double price_range2;
+
+
+
+            iss >> date >> flightNumber >> seatsPerRow >> totalRows >> row_range1 >> price_range1 >> row_range2 >> price_range2;
+            size_t separate_range1 = row_range1.find("-");
+            size_t separate_range2 = row_range2.find("-");
+
+
+            int range1_start = std::stoi(row_range1.substr(0, separate_range1));
+            int range1_end = std::stoi(row_range1.substr(separate_range1 + 1));
+            int range2_start = std::stoi(row_range2.substr(0, separate_range2));
+            int range2_end = std::stoi(row_range2.substr(separate_range2 + 1));
+
+
+            Flight flight(date, flightNumber, seatsPerRow, totalRows, range1_start, range1_end, price_range1, range2_start, range2_end, price_range2);
+            flights.push_back(flight);
+        }
+
+        configFile.close();
+    }
+
+
+
 private:
     std::vector<Flight> flights;
 
