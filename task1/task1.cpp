@@ -170,6 +170,72 @@ public:
         configFile.close();
     }
 
+    void checkSeatAvailability(const std::string& date, const std::string& flightNumber) {
+        for (const auto& flight : flights) {
+            if (flight.getDate() == date && flight.getFlightNumber() == flightNumber) {
+                for (const auto& seat : flight.getSeats()) {
+                    if (seat.isAvailable()) {
+                        std::cout << seat.getRow() << seat.getSeatNumber() << " " << seat.getPrice() << "$, ";
+                    }
+                }
+                std::cout << std::endl;
+                return;
+            }
+        }
+        std::cout << "Flight not found." << std::endl;
+    }
+
+    std::string bookTicket(const std::string& date, const std::string& flightNumber, const std::string& seat, const std::string& username) {
+        for (auto& flight : flights) {
+            if (flight.getDate() == date && flight.getFlightNumber() == flightNumber) {
+                if (flight.isSeatAvailable(seat)) {
+                    return flight.bookSeat(seat, username);
+                }
+                else {
+                    return "Seat not available";
+                }
+            }
+        }
+        return "Flight not found.";
+    }
+
+    std::string returnTicket(const std::string& bookingID) {
+        for (auto& flight : flights) {
+            for (auto& booking : flight.getBookedTickets()) {
+                if (booking.bookingID == bookingID) {
+                    flight.unbookSeat(bookingID);
+                    return "Booking with ID " + bookingID + " has been refunded for " + std::to_string(booking.price) + "$";
+                }
+            }
+        }
+        return "Booking with ID " + bookingID + " not found.";
+    }
+
+    std::string viewBookingInfo(const std::string& bookingID) {
+        for (const auto& flight : flights) {
+            for (const auto& booking : flight.getBookedTickets()) {
+                if (booking.bookingID == bookingID) {
+                    return "Booking ID: " + bookingID + "\n"
+                        + "Flight: " + booking.flightNumber + "\n"
+                        + "Date: " + booking.date + "\n"
+                        + "Seat: " + booking.seat + "\n"
+                        + "Username: " + booking.username + "\n"
+                        + "Price: " + std::to_string(booking.price) + "$";
+                }
+            }
+        }
+        return "Booking with ID " + bookingID + " not found.";
+    }
+
+    void viewUserBookings(const std::string& username) {
+        for (const auto& flight : flights) {
+            for (const auto& booking : flight.getBookedTickets()) {
+                if (booking.username == username) {
+                    std::cout << "Flight " << booking.flightNumber << ", " << booking.date << ", seat " << booking.seat << ", price " << booking.price << "$, " << username << std::endl;
+                }
+            }
+        }
+    }
 
 
 private:
