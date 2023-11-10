@@ -244,7 +244,51 @@ private:
 };
 
 int main() {
+    Airline airline;
+    airline.readConfiguration("C:/Labs_Kse/OOP/task1/config_test.txt");
 
+    while (true) {
+        std::cout << "Enter a command (check/book/return/view/view_username/exit): ";
+        std::string command;
+        std::getline(std::cin, command);
+
+        if (command == "check") {
+            std::string date, flightNumber;
+            std::cout << "Enter date and flight number: ";
+            std::cin >> date >> flightNumber;
+            airline.checkSeatAvailability(date, flightNumber);
+        }
+        else if (command == "book") {
+            std::string date, flightNumber, seat, username;
+            std::cout << "Enter date, flight number, seat, and username: ";
+            std::cin >> date >> flightNumber >> seat >> username;
+            std::string bookingResult = airline.bookTicket(date, flightNumber, seat, username);
+            std::cout << bookingResult << std::endl;
+        }
+        else if (command == "return") {
+            std::string bookingID;
+            std::cout << "Enter booking ID: ";
+            std::cin >> bookingID;
+            std::cout << airline.returnTicket(bookingID) << std::endl;
+
+        }
+        else if (command == "view") {
+            std::string bookingID;
+            std::cout << "Enter booking ID: ";
+            std::cin >> bookingID;
+            std::cout << airline.viewBookingInfo(bookingID) << std::endl;
+        }
+        else if (command == "view_username") {
+            std::string username;
+            std::cout << "Enter username: ";
+            std::cin >> username;
+            airline.viewUserBookings(username);
+        }
+        else if (command == "exit") {
+            break;
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
 
     return 0;
 }
