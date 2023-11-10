@@ -94,6 +94,14 @@ private:
     std::vector<Booking> bookedTickets;
 };
 
+class Airline {
+public:
+    Airline() {}
+
+private:
+    std::vector<Flight> flights;
+
+};
 
 int main() {
 
