@@ -59,7 +59,38 @@ public:
         }
     }
 
+    bool isSeatAvailable(const std::string& seat) const {
+        for (const auto& s : seats) {
+            if (s.isAvailable() && s.getRow() == seat[0] && s.getSeatNumber() == std::stoi(seat.substr(1))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    std::string bookSeat(const std::string& seat, const std::string& username) {
+        for (auto& s : seats) {
+            if (s.isAvailable() && s.getRow() == seat[0] && s.getSeatNumber() == std::stoi(seat.substr(1))) {
+                s.book();
+                std::string bookingID = flightNumber + "-" + std::to_string(lastBookingID++);
+                bookedTickets.push_back({ flightNumber, date, seat, username, s.getPrice(), bookingID });
+                return "Confirmed with ID " + bookingID;
+            }
+        }
+        return "Seat not available";
 
+    }
+    void unbookSeat(const std::string& bookingID) {
+        for (auto& booking : bookedTickets) {
+            if (booking.bookingID == bookingID) {
+                for (auto& s : seats) {
+                    if (s.getRow() == booking.seat[0] && s.getSeatNumber() == std::stoi(booking.seat.substr(1))) {
+                        s.unbook();
+                        return;
+                    }
+                }
+            }
+        }
+    }
  
 
     const std::vector<Seat>& getSeats() const {
