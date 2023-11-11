@@ -10,6 +10,12 @@ public:
     Seat(char row, int seatNumber, double price)
         : row(row), seatNumber(seatNumber), price(price), isBooked(false) {}
 
+    Seat(const Seat& other)
+        : row(other.row), seatNumber(other.seatNumber), price(other.price), isBooked(other.isBooked) {}
+
+    Seat(const Seat&& other)
+        : row(std::move(other.row)), seatNumber(std::move(other.seatNumber)), price(std::move(other.price)), isBooked(std::move(other.isBooked)) {}
+
     bool isAvailable() const { return !isBooked; }
     void book() { isBooked = true; }
     void unbook() { isBooked = false; }
