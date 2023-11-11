@@ -91,7 +91,7 @@ public:
             }
         }
     }
- 
+
 
     const std::vector<Seat>& getSeats() const {
         return seats;
